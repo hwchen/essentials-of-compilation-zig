@@ -14,6 +14,7 @@ const Token = enum {
     @"=",
     @"(",
     @")",
+    @";",
 
     sentinel, // End of string
     invalid, // Invalid token
@@ -32,17 +33,17 @@ const Lexer = dre.Lexer(Token, .{
     .@"=" = "=",
     .@"(" = "%(",
     .@")" = "%)",
+    .@";" = ";",
 });
 
 const Parser = blk: {
     @setEvalBranchQuota(100000);
     break :blk zacc.Parser(Token,
-        \\ //start = program $
-        \\ //program = stmt*
-        \\ start = stmt $;
-        \\ stmt = var '=' exp
-        \\      | .print '(' exp ')'
-        \\      | exp;
+        \\ start = stmts $;
+        \\ stmts = stmts stmt | stmt;
+        \\ stmt = var '=' exp ';'
+        \\      | .print '(' exp ')' ';'
+        \\      | exp ';' ;
         \\ exp = var
         \\     | int
         \\     | .input_int '(' ')'
@@ -63,7 +64,7 @@ pub fn parse(alloc: Allocator, input: []const u8) !void {
 }
 
 test "smoke test lexer" {
-    var toks = Lexer.init("a = 1 + (input_int() - 3)");
+    var toks = Lexer.init("a = 1 + (input_int() - 3);");
 
     const expect = [_]Token{
         .word,
@@ -78,6 +79,7 @@ test "smoke test lexer" {
         .@"-",
         .number,
         .@")",
+        .@";",
         .sentinel,
     };
 
