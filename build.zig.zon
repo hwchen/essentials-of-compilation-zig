@@ -6,5 +6,9 @@
             .url = "https://github.com/silversquirl/dre/archive/70a675b0ef33f78b1ba4fcda20ab5b226d0aabe6.tar.gz",
             .hash = "122015ade6b54e3dd77736cce3e98796511e0caa8833882de31084079371e3a29148",
         },
+        .zacc = .{
+            .url = "https://github.com/silversquirl/zacc/archive/12d2fbc2dfb8978b5cc906e736188f6e8f722691.tar.gz",
+            .hash = "12206b20b62d6b04a5dd54f961a99510c2313a498970b52677eee84a0f40a406c144",
+        },
     },
 }

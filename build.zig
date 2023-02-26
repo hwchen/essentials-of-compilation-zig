@@ -5,6 +5,7 @@ const std = @import("std");
 // runner.
 pub fn build(b: *std.Build) void {
     const dre = b.dependency("dre", .{}).module("dre");
+    const zacc = b.dependency("zacc", .{}).module("zacc");
 
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
@@ -26,6 +27,7 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     exe.addModule("dre", dre);
+    exe.addModule("zacc", zacc);
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
@@ -62,6 +64,7 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     exe_tests.addModule("dre", dre);
+    exe_tests.addModule("zacc", zacc);
 
     // Similar to creating the run step earlier, this exposes a `test` step to
     // the `zig build --help` menu, providing a way for the user to request
