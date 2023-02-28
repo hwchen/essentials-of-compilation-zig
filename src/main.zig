@@ -18,5 +18,9 @@ pub fn main() !void {
 
     const src = try f.readToEndAlloc(alloc, 1024 * 100);
 
-    try parser.parse(alloc, src);
+    const ast = try parser.parse(alloc, src);
+    std.log.info("num stmts: {d}", .{ast.stmts.items.len});
+    for (ast.stmts.items) |stmt| {
+        std.log.info("stmt: {any}", .{stmt});
+    }
 }
