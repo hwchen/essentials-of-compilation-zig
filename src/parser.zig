@@ -229,4 +229,59 @@ pub const Ast = struct {
         add,
         sub,
     };
+
+    pub fn debugPrint(self: Self) void {
+        for (self.stmts.items) |stmt| {
+            printStmt(stmt);
+            std.debug.print(" ;\n", .{});
+        }
+    }
 };
+
+fn printStmt(stmt: Ast.Stmt) void {
+    switch (stmt) {
+        .print => |exp| {
+            std.debug.print("Print Stmt: ", .{});
+            printExp(exp);
+        },
+        .expr => |exp| {
+            std.debug.print("Expr Stmt: ", .{});
+            printExp(exp);
+        },
+        .assign => |assign| {
+            std.debug.print("Assign Stmt: {s} = ", .{assign.variable});
+            printExp(assign.expr);
+        },
+    }
+}
+
+fn printExp(exp: Ast.Exp) void {
+    switch (exp) {
+        .number => |n| std.debug.print("{d}", .{n}),
+        .variable => |a| std.debug.print("{s}", .{a}),
+        .binary_op => |bin_op| {
+            printExp(bin_op.lhs.*);
+            std.debug.print(" ", .{});
+            printOpCode(bin_op.op);
+            std.debug.print(" ", .{});
+            printExp(bin_op.rhs.*);
+        },
+        .unary_op => |u_op| {
+            printOpCode(u_op.op);
+            printExp(u_op.expr.*);
+        },
+        .group => |e| {
+            std.debug.print("( ", .{});
+            printExp(e.*);
+            std.debug.print(" )", .{});
+        },
+        .input_int => std.debug.print("input_int", .{}),
+    }
+}
+
+fn printOpCode(op: Ast.OpCode) void {
+    switch (op) {
+        .add => std.debug.print("+", .{}),
+        .sub => std.debug.print("-", .{}),
+    }
+}
