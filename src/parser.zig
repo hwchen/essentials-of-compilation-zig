@@ -116,6 +116,9 @@ pub const Context = struct {
         @"(", // to know when group starts
         unused,
 
+        /// All variants are allocated on the Ast arena, so there's no
+        /// need to deinit here, it's just a required fn in the Context
+        /// interface
         pub fn deinit(_: Result, _: Allocator) void {}
     };
 
@@ -161,8 +164,10 @@ pub const Context = struct {
                     break :blk .{ .exp = .{ .group = expr_ptr } };
                 },
                 .input_int => .{ .exp = .input_int },
+                // TODO fix ident here and in binary_op
+                .ident =>
 
-                // ident and number
+                // number
                 else => children[0],
             },
         };
