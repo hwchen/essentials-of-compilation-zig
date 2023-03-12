@@ -164,8 +164,9 @@ pub const Context = struct {
                     break :blk .{ .exp = .{ .group = expr_ptr } };
                 },
                 .input_int => .{ .exp = .input_int },
-                // TODO fix ident here and in binary_op
-                .ident =>
+                // Because it's not a statement (that branch is already checked), we know this must just be
+                // an Ast.Exp.variable, and not Ast.Stmt.assign.variable
+                .ident => |s| .{ .exp = .{ .variable = s } },
 
                 // number
                 else => children[0],
